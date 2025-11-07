@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AniReal - Anime Zone</title>
+  <!-- CSS फाइल को यहाँ लिंक करें -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== HOME PAGE VIEW ==================== -->
+  <div id="homePage">
+    <div class="navbar">
+      <div class="navbar-left"><img src="https://files.catbox.moe/yupc9e.jpg" alt="Profile" class="menu-icon"></div>
+      <div class="title" id="mainTitle"><img src="https://files.catbox.moe/x0pn1v.png" alt="AniReal Logo" style="height: 55px; vertical-align: middle;"></div>
+      <div class="navbar-right">
+        <svg class="search-toggle-icon" id="searchIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+        <svg class="notification-icon" id="notificationIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
+      </div>
+    </div>
+    <!-- Slider -->
+    <div class="slider-container">
+        <div class="slider" id="mainSlider">
+            <!-- Slides will be injected here by JavaScript from Firebase -->
+        </div>
+    </div>
+
+    <!-- Container for dynamically loaded sections -->
+    <div id="dynamic-content-container">
+        <!-- New Release, Popular Characters, and all Anime/Series categories will be loaded here -->
+    </div>
+    
+    <!-- See All Button Container -->
+    <div class="see-all-container">
+      <button class="see-all-btn" id="seeAllBtn">See All</button>
+    </div>
+
+    <!-- Footer Section -->
+    <hr class="footer-divider">
+    <div class="footer-section">
+        <h3>About AniReal Anime Zone</h3>
+        <p class="about-text">Discover the latest updates, posters, and anime highlights — all in one place.
+        We respect every creator and studio. AniReal Anime Zone does not host, upload, or stream any video content and shares information only for fan-based and educational purposes.</p>
+        <p class="copyright">© 2025 AniReal Anime Zone. All Rights Reserved.</p>
+    </div>
+  </div>
+
+  <!-- Other Pages -->
+  <div id="searchPage">
+    <div class="page-navbar search-container">
+        <svg class="back-icon" id="backButtonSearch" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search Anime..." autocomplete="off">
+        <div class="suggestions-container" id="suggestionsContainer"></div>
+    </div>
+    <div class="page-content" id="searchResults">
+        <!-- Search results will be dynamically inserted here -->
+    </div>
+  </div>
+  
+  <div id="detailsPage">
+    <div class="page-navbar">
+        <svg class="back-icon" id="backButtonDetails" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <h2 id="detailsPageTitle" style="flex-grow: 1; text-align: center; margin: 0;">Details</h2>
+    </div>
+    <div class="page-content">
+        <div class="details-infobox">
+            <h1 id="detailsTitle" class="details-title-box">Anime Title</h1>
+            <div class="info-rows-container">
+                <div class="info-row">
+                    <span class="info-label">Rating:</span>
+                    <span id="detailsRating" class="info-value"></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Genre:</span>
+                    <span id="detailsGenre" class="info-value"></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">File Size:</span>
+                    <span id="detailsFileSize" class="info-value"></span>
+                </div>
+                <div class="info-row" id="zip-info-row">
+                    <span class="info-label">Zip Files:</span>
+                    <span id="detailsZip" class="info-value"></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Audio:</span>
+                    <span id="detailsAudio" class="info-value"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-box">
+             <a href="#" target="_blank" class="download-btn quality-480p" id="download-480p">Download 480p</a>
+             <a href="#" target="_blank" class="download-btn quality-720p" id="download-720p">Download 720p</a>
+             <a href="#" target="_blank" class="download-btn quality-1080p" id="download-1080p">Download 1080p</a>
+        </div>
+        <div id="zip-download-box" style="margin-top: 15px;">
+            <a href="#" target="_blank" id="zipFileLink" class="download-btn quality-1080p">Download Zip File</a>
+        </div>
+
+
+        <div class="social-buttons-container">
+            <a href="https://t.me/AniReal_Anime_Zone" target="_blank" class="social-btn update-btn">Update Channel</a>
+            <a href="https://t.me/AniReal_Chat_Group_Asia" target="_blank" class="social-btn support-btn">Support Group</a>
+        </div>
+
+        <p id="detailsDescription" class="details-description"></p>
+    </div>
+  </div>
+
+  <div id="upcomingPage">
+      <div class="page-navbar">
+          <svg class="back-icon" id="backButtonUpcoming" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <h2 style="flex-grow: 1; text-align: center; margin: 0;">Upcoming Releases</h2>
+      </div>
+      <div class="page-content" id="upcoming-content">
+          <!-- Upcoming releases will be loaded here from Firebase -->
+      </div>
+  </div>
+
+
+  <!-- All Anime Page -->
+  <div id="allAnimePage">
+    <div class="page-navbar">
+        <svg class="back-icon" id="backButtonAllAnime" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <h2 style="flex-grow: 1; text-align: center; margin: 0;">All Anime</h2>
+    </div>
+    <div class="page-content">
+      <!-- All anime cards will be injected here by JavaScript -->
+    </div>
+  </div>
+  
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- JavaScript फाइल को यहाँ लिंक करें -->
+  <script src="script.js"></script>
+</body>
+</html>
