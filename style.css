@@ -343,23 +343,34 @@ body {
     border-bottom: 1px solid #3c2f50;
     font-weight: bold;
 }
+
+/* === FIXED DETAILS ROW STYLES === */
 .info-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* 'flex-start' aligns items to the top, which is better for multi-line text */
     font-size: 15px;
     margin-bottom: 12px;
+    gap: 15px; /* Adds space between the label and value */
 }
-.info-row:last-child {
-    margin-bottom: 0;
-}
+
 .info-label {
     color: #ccc;
+    flex-shrink: 0; /* Prevents the label from shrinking or wrapping */
 }
+
 .info-value {
     color: #fff;
     font-weight: 500;
+    text-align: right; /* Aligns the text to the right */
+    word-break: break-word; /* This is the most important part: it allows long text to wrap to the next line */
 }
+/* === END OF FIX === */
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
 .download-box {
     display: flex;
     flex-direction: column;
@@ -379,12 +390,19 @@ body {
 .quality-480p { background-color: #FFD700; color: #121212; }
 .quality-720p { background-color: #4CAF50; color: white; }
 .quality-1080p { background-color: #9147ff; color: white; }
+
+/* === YAHAN FINAL BADLAV KIYA GAYA HAI === */
 .details-description {
     font-size: 15px;
     color: #ccc;
-    line-height: 1.6;
+    line-height: 1.9; /* लाइनों के बीच की दूरी और बढ़ाई गई है */
     margin-top: 25px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap; /* यह सुनिश्चित करता है कि टेक्स्ट जैसा लिखा गया है वैसा ही दिखे */
 }
+/* === BADLAV KHATAM === */
+
 /* New Social Buttons */
 .social-buttons-container {
     display: flex;
@@ -451,4 +469,4 @@ body {
   .all-anime-grid {
       grid-template-columns: 1fr;
   }
-}
+  }
