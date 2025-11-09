@@ -2,16 +2,16 @@
   -webkit-tap-highlight-color: transparent; /* यह लाइन क्लिक करने पर आने वाले नीले हाईलाइट को हटा देती है */
 }
 :root {
-  --bg-color: #1a1024; /* Dark Purple Background */
+  --bg-color: #000000; /* Black Background */
   --text-color: #ffffff;
   --nav-color: #2c213d; /* Lighter Purple for elements */
-  --primary-color: #9147ff; /* Bright Purple Accent */
+  --primary-color: #FFA500; /* Orange Accent */
   --play-button-color: var(--primary-color);
 }
 
 body {
   margin: 0;
-  background-color: var(--bg-color);
+  background-color: var(--bg-color); /* Black background */
   color: var(--text-color);
   font-family: Arial, sans-serif;
 }
@@ -30,8 +30,8 @@ body {
 .navbar-left, .navbar-right { display: flex; align-items: center; gap: 15px; }
 
 .menu-icon {
-  width: 32px;
-  height: 32px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
@@ -77,7 +77,10 @@ body {
   padding: 10px 24px; border-radius: 20px; border: none; cursor: pointer;
   font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; text-decoration: none; justify-content: center;
 }
-.play-button { background-color: var(--play-button-color); color: var(--text-color); }
+.play-button { 
+  background-color: var(--play-button-color); 
+  color: #121212; /* Dark text for better contrast */
+}
 .list-button { background-color: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.5); }
 
 /* ===== CATEGORY SECTION ===== */
@@ -128,7 +131,7 @@ body {
 .see-all-container { text-align: center; padding: 30px 20px; }
 .see-all-btn {
   background-color: var(--primary-color);
-  color: var(--text-color);
+  color: #121212; /* Dark text for better contrast */
   padding: 12px 30px;
   font-size: 16px;
   font-weight: bold;
@@ -240,7 +243,7 @@ body {
     font-weight: bold;
     font-size: 14px;
     background-color: var(--primary-color);
-    color: var(--text-color);
+    color: #121212; /* Dark text for better contrast */
     width: 100%;
 }
 
@@ -387,9 +390,9 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
-.quality-480p { background-color: #FFD700; color: #121212; }
+.quality-480p { background-color: #FFA500; color: #121212; }
 .quality-720p { background-color: #4CAF50; color: white; }
-.quality-1080p { background-color: #9147ff; color: white; }
+.quality-1080p { background-color: var(--primary-color); color: #121212; /* Dark text for better contrast */ }
 
 /* === YAHAN FINAL BADLAV KIYA GAYA HAI === */
 .details-description {
