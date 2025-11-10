@@ -18,6 +18,7 @@ const searchPage = document.getElementById('searchPage');
 const detailsPage = document.getElementById('detailsPage');
 const upcomingPage = document.getElementById('upcomingPage');
 const allAnimePage = document.getElementById('allAnimePage');
+const dmcaPage = document.getElementById('dmcaPage'); // New DMCA page element
 
 const searchIcon = document.getElementById('searchIcon');
 const notificationIcon = document.getElementById('notificationIcon');
@@ -26,6 +27,7 @@ const backButtonSearch = document.getElementById('backButtonSearch');
 const backButtonDetails = document.getElementById('backButtonDetails');
 const backButtonUpcoming = document.getElementById('backButtonUpcoming');
 const backButtonAllAnime = document.getElementById('backButtonAllAnime');
+const backButtonDmca = document.getElementById('backButtonDmca'); // New DMCA back button
 const searchInput = document.getElementById('searchInput');
 const mainSlider = document.getElementById('mainSlider');
 const dynamicContentContainer = document.getElementById('dynamic-content-container');
@@ -39,6 +41,7 @@ function hideAllPages() {
     detailsPage.style.display = 'none';
     upcomingPage.style.display = 'none';
     allAnimePage.style.display = 'none';
+    dmcaPage.style.display = 'none'; // Hide DMCA page
 }
 
 searchIcon.addEventListener('click', () => {
@@ -55,12 +58,24 @@ notificationIcon.addEventListener('click', () => {
   window.scrollTo(0, 0);
 });
 
+// Event listener for the new footer links (Privacy, Terms, DMCA)
+const dmcaLinks = document.querySelectorAll('.js-dmca-link');
+dmcaLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent default link behavior
+        hideAllPages();
+        dmcaPage.style.display = 'block';
+        window.scrollTo(0, 0);
+    });
+});
+
 function goBackToHome() {
     hideAllPages();
     homePage.style.display = 'block';
 }
 
-[backButtonSearch, backButtonDetails, backButtonUpcoming, backButtonAllAnime].forEach(btn => {
+// Added the new DMCA back button to the list
+[backButtonSearch, backButtonDetails, backButtonUpcoming, backButtonAllAnime, backButtonDmca].forEach(btn => {
     btn.addEventListener('click', goBackToHome);
 });
 
@@ -304,7 +319,7 @@ async function fetchAndRenderCategories() {
     }
 }
 
-// 5. Fetch Upcoming Releases for Bell Icon Page
+// 5. Fetch Upcoming Releases for Bell Icon Page [UPDATED FUNCTION]
 async function fetchAndRenderUpcoming() {
     const container = document.getElementById('upcoming-content');
     try {
@@ -317,11 +332,18 @@ async function fetchAndRenderUpcoming() {
 
         snapshot.forEach(doc => {
             const data = doc.data();
-            let releaseTimestamp; // This will hold the final release time in milliseconds
+            let releaseTimestamp; 
 
-            // Check if the new custom duration format is used (e.g., D1 H12 M30 S42)
+            // Check if the new custom duration format is used (e.g., D52 H12)
             if (data.time && (data.time.toUpperCase().includes('D') || data.time.toUpperCase().includes('H') || data.time.toUpperCase().includes('M') || data.time.toUpperCase().includes('S'))) {
                 
+                // This logic requires a valid creation timestamp from Firebase.
+                // If it's missing, the timer cannot work correctly.
+                if (!data.createdAt || typeof data.createdAt.toMillis !== 'function') {
+                    console.error("Skipping upcoming item due to missing or invalid 'createdAt' field:", data.title);
+                    return; // Skips this item and moves to the next one
+                }
+
                 let days = 0, hours = 0, minutes = 0, seconds = 0;
                 const timeUpper = data.time.toUpperCase();
 
@@ -337,11 +359,10 @@ async function fetchAndRenderUpcoming() {
                 const secondMatch = timeUpper.match(/S(\d+)/);
                 if (secondMatch) seconds = parseInt(secondMatch[1], 10);
 
-                // Calculate total duration in milliseconds
                 const totalMilliseconds = (days * 86400000) + (hours * 3600000) + (minutes * 60000) + (seconds * 1000);
                 
-                // The final release time is the creation time of the document + the specified duration.
-                const creationTime = data.createdAt ? data.createdAt.toMillis() : new Date().getTime();
+                // Use the fixed creation time from the database. This is the fix.
+                const creationTime = data.createdAt.toMillis();
                 releaseTimestamp = creationTime + totalMilliseconds;
 
             } else {
@@ -350,7 +371,10 @@ async function fetchAndRenderUpcoming() {
                 releaseTimestamp = new Date(releaseDateTimeString).getTime();
             }
             
-            if (isNaN(releaseTimestamp)) return; // Don't render if the timestamp is invalid
+            if (isNaN(releaseTimestamp)) {
+                console.error("Invalid release timestamp calculated for:", data.title);
+                return; // Skip if the final date is invalid
+            }
 
             const bannerHTML = `
                 <div class="upcoming-banner" style="background-image: url('${data.imageUrl}');" data-release-date="${releaseTimestamp}">
@@ -375,6 +399,7 @@ async function fetchAndRenderUpcoming() {
          container.innerHTML = '<p>Error loading upcoming releases.</p>';
     }
 }
+
 
 // --- SLIDER LOGIC ---
 let currentIndex = 0;
@@ -489,6 +514,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// [FIXED FUNCTION]
 function renderAllAnimePage(animeData) {
     const contentArea = document.querySelector('#allAnimePage .page-content');
     contentArea.innerHTML = ''; 
@@ -496,7 +522,10 @@ function renderAllAnimePage(animeData) {
     const gridContainer = document.createElement('div');
     gridContainer.className = 'all-anime-grid';
     
-    animeData.forEach(anime => {
+    // Filters out items that might not have a title or image, just in case
+    const validAnimeData = animeData.filter(anime => anime.title && (anime.imageUrl || anime.poster));
+    
+    validAnimeData.forEach(anime => {
         const cardHTML = `
             <div class="card" data-anime-id="${anime.id}">
                 <div class="card-img">
