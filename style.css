@@ -16,15 +16,16 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* ===== NAVBAR ===== */
+/* ===== NAVBAR [COLOR CHANGED TO BLACK] ===== */
 #homePage .navbar {
   position: absolute; top: 0; left: 0; right: 0; z-index: 10;
-  background-color: rgba(44, 33, 61, 0.6); /* Purple Tinted Header */
+  background-color: rgba(0, 0, 0, 0.6); /* Black Tinted Header */
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   box-shadow: none;
 }
 .navbar {
-  background-color: var(--nav-color); padding: 12px 15px; /* Adjusted left/right padding */
+  background-color: #000000; /* Changed to Black */
+  padding: 12px 15px; /* Adjusted left/right padding */
   display: flex; align-items: center; justify-content: space-between;
 }
 .navbar-left, .navbar-right { display: flex; align-items: center; gap: 15px; }
@@ -140,7 +141,7 @@ body {
   cursor: pointer;
 }
 
-/* ===== Footer Section ===== */
+/* ===== Footer Section [UPDATED] ===== */
 .footer-divider {
   border: none;
   height: 1px;
@@ -163,15 +164,42 @@ body {
   max-width: 650px;
   margin: 0 auto 20px auto;
 }
-.footer-section .copyright {
-  font-size: 13px;
-  color: #aaa;
-  margin: 0;
+/* New Footer Bottom Styles */
+.footer-bottom {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.footer-bottom p {
+    margin: 4px 0;
+}
+.copyright-text {
+    color: #aaa; /* Light grey for copyright text */
+}
+.footer-line-1, .footer-line-2 {
+    color: #555; /* Color for the separators */
+}
+.footer-bottom a {
+    color: #22d3ee; /* Bright cyan color for links */
+    text-decoration: none;
+    font-weight: 500;
+    margin: 0 3px;
+    cursor: pointer;
+}
+.footer-bottom a:hover {
+    text-decoration: underline;
 }
 
-/* ===== GENERIC PAGE STYLES ===== */
-#searchPage, #detailsPage, #upcomingPage, #allAnimePage { display: none; }
-.page-navbar { background-color: var(--nav-color); padding: 12px 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+/* ===== GENERIC PAGE STYLES [HEADER COLOR CHANGED] ===== */
+#searchPage, #detailsPage, #upcomingPage, #allAnimePage, #dmcaPage { display: none; }
+.page-navbar { 
+  background-color: #000000; /* Changed to Black */
+  padding: 12px 20px; 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+}
 .search-input { flex-grow: 1; padding: 8px 15px; font-size: 16px; border: 1px solid #555; border-radius: 20px; outline: none; background-color: #2b2b2b; color: #fff; }
 .search-input:focus { border-color: var(--primary-color); }
 .page-content { padding: 20px; }
@@ -448,6 +476,43 @@ body {
     height: 240px;
 }
 
+/* ===== NEW DMCA PAGE STYLES ===== */
+#dmca-content {
+    color: #ccc;
+    line-height: 1.7;
+}
+#dmca-content h3 {
+    color: var(--primary-color);
+    font-size: 20px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+#dmca-content h3:first-child {
+    margin-top: 0;
+}
+#dmca-content p {
+    margin-bottom: 1em;
+}
+#dmca-content ol {
+    padding-left: 20px;
+}
+#dmca-content li {
+    margin-bottom: 1em;
+}
+#dmca-content a {
+    color: #4dabf7; /* Lighter blue for links */
+    text-decoration: none;
+}
+#dmca-content a:hover {
+    text-decoration: underline;
+}
+.content-divider {
+  border: none;
+  height: 1px;
+  background-color: #2a2a2a;
+  margin: 30px 0;
+}
+
 @media (max-width: 768px) {
   .slider-container { height: 560px; }
   .slide-title { font-size: 24px; }
@@ -472,4 +537,4 @@ body {
   .all-anime-grid {
       grid-template-columns: 1fr;
   }
-  }
+        }
