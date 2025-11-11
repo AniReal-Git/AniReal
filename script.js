@@ -58,16 +58,14 @@ notificationIcon.addEventListener('click', () => {
   window.scrollTo(0, 0);
 });
 
-// Event listener for the new footer links (Privacy, Terms, DMCA)
-const dmcaLinks = document.querySelectorAll('.js-dmca-link');
-dmcaLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent default link behavior
-        hideAllPages();
-        dmcaPage.style.display = 'block';
-        window.scrollTo(0, 0);
-    });
+// Event listener for the new footer link (DMCA)
+document.getElementById('dmcaLink').addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent default link behavior
+    hideAllPages();
+    dmcaPage.style.display = 'block';
+    window.scrollTo(0, 0);
 });
+
 
 function goBackToHome() {
     hideAllPages();
@@ -146,7 +144,7 @@ function renderSimpleDetailsPage(title, description) {
 
 // --- DATA FETCHING FUNCTIONS FROM FIREBASE ---
 
-// 1. Fetch Banners for Slider
+// 1. Fetch Banners for Slider [MODIFIED FUNCTION]
 async function fetchAndRenderSlider() {
     try {
         const snapshot = await db.collection('animeBanners').orderBy("createdAt", "desc").get();
@@ -161,15 +159,18 @@ async function fetchAndRenderSlider() {
                 genres: data.genre || '',
                 poster: data.imageUrl,
                 description: data.description,
-                ...data // Store all other fields like rating, fileSize etc.
+                ...data 
             };
             sliderData.push(anime);
-            allAnimeData.push(anime); // Add to global data list
+            if (!allAnimeData.some(a => a.id === anime.id)) {
+                allAnimeData.push(anime);
+            }
         });
 
-        sliderData.forEach(anime => {
+        sliderData.forEach((anime, index) => {
+            // Add 'active' class to the first slide
             const slideHTML = `
-                <div class="slide">
+                <div class="slide ${index === 0 ? 'active' : ''}">
                     <img src="${anime.poster}" alt="${anime.title}">
                     <div class="slide-content">
                         <h2 class="slide-title">${anime.title}</h2>
@@ -184,19 +185,22 @@ async function fetchAndRenderSlider() {
             mainSlider.insertAdjacentHTML('beforeend', slideHTML);
         });
         
-        // Re-attach listeners for the new details buttons
         mainSlider.querySelectorAll('.list-button').forEach(button => {
             button.addEventListener('click', (e) => {
                 renderDetailsPage(e.target.dataset.animeId);
             });
         });
-
+        
+        // After rendering, setup manual controls and start the auto-slider
+        setupSliderControls();
         startAutoSlider();
+
     } catch (error) {
         console.error("Error fetching banners: ", error);
         mainSlider.innerHTML = '<p>Error loading banners.</p>';
     }
 }
+
 
 // 2. Fetch "Add Update" for New Release Section
 async function fetchAndRenderNewReleases() {
@@ -258,7 +262,12 @@ async function fetchAndRenderCategories() {
         animeSnapshot.forEach(doc => allItems.push({ id: doc.id, type: 'anime', ...doc.data() }));
         seriesSnapshot.forEach(doc => allItems.push({ id: doc.id, type: 'series', ...doc.data() }));
 
-        allAnimeData = allAnimeData.concat(allItems); // Add all to global data list
+        // Add all to global data list, ensuring no duplicates
+        allItems.forEach(item => {
+            if (!allAnimeData.some(a => a.id === item.id)) {
+                allAnimeData.push(item);
+            }
+        });
 
         // Group by category
         const groupedByCategory = allItems.reduce((acc, item) => {
@@ -319,7 +328,7 @@ async function fetchAndRenderCategories() {
     }
 }
 
-// 5. Fetch Upcoming Releases for Bell Icon Page [UPDATED FUNCTION]
+// 5. Fetch Upcoming Releases for Bell Icon Page
 async function fetchAndRenderUpcoming() {
     const container = document.getElementById('upcoming-content');
     try {
@@ -334,46 +343,35 @@ async function fetchAndRenderUpcoming() {
             const data = doc.data();
             let releaseTimestamp; 
 
-            // Check if the new custom duration format is used (e.g., D52 H12)
             if (data.time && (data.time.toUpperCase().includes('D') || data.time.toUpperCase().includes('H') || data.time.toUpperCase().includes('M') || data.time.toUpperCase().includes('S'))) {
-                
-                // This logic requires a valid creation timestamp from Firebase.
-                // If it's missing, the timer cannot work correctly.
                 if (!data.createdAt || typeof data.createdAt.toMillis !== 'function') {
                     console.error("Skipping upcoming item due to missing or invalid 'createdAt' field:", data.title);
-                    return; // Skips this item and moves to the next one
+                    return; 
                 }
 
                 let days = 0, hours = 0, minutes = 0, seconds = 0;
                 const timeUpper = data.time.toUpperCase();
-
                 const dayMatch = timeUpper.match(/D(\d+)/);
                 if (dayMatch) days = parseInt(dayMatch[1], 10);
-
                 const hourMatch = timeUpper.match(/H(\d+)/);
                 if (hourMatch) hours = parseInt(hourMatch[1], 10);
-                
                 const minuteMatch = timeUpper.match(/M(\d+)/);
                 if (minuteMatch) minutes = parseInt(minuteMatch[1], 10);
-
                 const secondMatch = timeUpper.match(/S(\d+)/);
                 if (secondMatch) seconds = parseInt(secondMatch[1], 10);
 
                 const totalMilliseconds = (days * 86400000) + (hours * 3600000) + (minutes * 60000) + (seconds * 1000);
-                
-                // Use the fixed creation time from the database. This is the fix.
                 const creationTime = data.createdAt.toMillis();
                 releaseTimestamp = creationTime + totalMilliseconds;
 
             } else {
-                // Fallback to old logic: a fixed date and time (e.g., 2025-12-25 and 22:30)
                 const releaseDateTimeString = `${data.date || new Date().toISOString().split('T')[0]}T${data.time || '00:00'}:00`;
                 releaseTimestamp = new Date(releaseDateTimeString).getTime();
             }
             
             if (isNaN(releaseTimestamp)) {
                 console.error("Invalid release timestamp calculated for:", data.title);
-                return; // Skip if the final date is invalid
+                return;
             }
 
             const bannerHTML = `
@@ -393,7 +391,7 @@ async function fetchAndRenderUpcoming() {
                 </div>`;
             container.innerHTML += bannerHTML;
         });
-        startCountdownTimers(); // Start timers after content is loaded
+        startCountdownTimers();
     } catch (error) {
          console.error("Error fetching upcoming releases: ", error);
          container.innerHTML = '<p>Error loading upcoming releases.</p>';
@@ -401,18 +399,103 @@ async function fetchAndRenderUpcoming() {
 }
 
 
-// --- SLIDER LOGIC ---
+// --- SLIDER LOGIC [REPLACED FOR FADE EFFECT & MANUAL CONTROLS] ---
 let currentIndex = 0;
 let slideInterval;
-function updateSliderPosition() { if(mainSlider && mainSlider.children.length > 0) { mainSlider.style.transform = `translateX(-${currentIndex * (100 / mainSlider.children.length)}%)`; } }
-function nextSlide() { if(mainSlider && mainSlider.children.length > 0){ currentIndex = (currentIndex + 1) % mainSlider.children.length; updateSliderPosition(); } }
-function startAutoSlider() { stopAutoSlider(); if(mainSlider.children.length > 1) slideInterval = setInterval(nextSlide, 3000); }
-function stopAutoSlider() { clearInterval(slideInterval); }
+
+function showSlide(index) {
+    const slides = mainSlider.querySelectorAll('.slide');
+    if (!slides || slides.length === 0) return;
+
+    // Ensure index is within bounds and loops correctly
+    if (index >= slides.length) {
+        currentIndex = 0;
+    } else if (index < 0) {
+        currentIndex = slides.length - 1;
+    } else {
+        currentIndex = index;
+    }
+
+    slides.forEach((slide, i) => {
+        if (i === currentIndex) {
+            slide.classList.add('active');
+        } else {
+            slide.classList.remove('active');
+        }
+    });
+}
+
+function nextSlide() {
+    showSlide(currentIndex + 1);
+}
+
+function prevSlide() {
+    showSlide(currentIndex - 1);
+}
+
+function startAutoSlider() {
+    stopAutoSlider();
+    if (mainSlider.children.length > 1) {
+        slideInterval = setInterval(nextSlide, 4000); // Increased interval for a smoother feel with fade
+    }
+}
+
+function stopAutoSlider() {
+    clearInterval(slideInterval);
+}
+
+// New function to set up all slider controls (buttons and swipe)
+function setupSliderControls() {
+    const prevButton = document.getElementById('sliderPrev');
+    const nextButton = document.getElementById('sliderNext');
+    const sliderContainer = document.querySelector('.slider-container');
+
+    // Manual Button Clicks
+    prevButton.addEventListener('click', () => {
+        prevSlide();
+        startAutoSlider(); // Reset timer on manual click
+    });
+
+    nextButton.addEventListener('click', () => {
+        nextSlide();
+        startAutoSlider(); // Reset timer on manual click
+    });
+
+    // Swipe Gestures for Mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    sliderContainer.addEventListener('touchstart', (event) => {
+        touchStartX = event.changedTouches[0].screenX;
+        stopAutoSlider(); // Pause slider during touch
+    }, { passive: true });
+
+    sliderContainer.addEventListener('touchend', (event) => {
+        touchEndX = event.changedTouches[0].screenX;
+        handleSwipe();
+        startAutoSlider(); // Resume slider after touch
+    }, { passive: true });
+
+    function handleSwipe() {
+        // Check if swipe distance is significant enough to not be an accidental tap
+        if (Math.abs(touchEndX - touchStartX) < 50) return;
+
+        if (touchEndX < touchStartX) {
+            // Swiped left
+            nextSlide();
+        }
+
+        if (touchEndX > touchStartX) {
+            // Swiped right
+            prevSlide();
+        }
+    }
+}
+
 
 // --- Countdown Timer Logic ---
 function startCountdownTimers() {
     document.querySelectorAll('.upcoming-banner').forEach(banner => {
-        // Read the timestamp directly now, it's already in milliseconds
         const releaseDate = parseInt(banner.getAttribute('data-release-date'), 10);
         if (isNaN(releaseDate)) return;
 
@@ -559,15 +642,12 @@ async function initializeApp() {
     dynamicContentContainer.innerHTML = '<p style="text-align:center; padding: 40px;">Loading Content...</p>';
     await fetchAndRenderSlider();
     
-    // Clear container before adding new content
     dynamicContentContainer.innerHTML = '';
     
-    // Load all sections in order
     await fetchAndRenderNewReleases();
     await fetchAndRenderPopularCharacters();
-    await fetchAndRenderCategories(); // This handles both anime and series/fantasy
+    await fetchAndRenderCategories();
 
-    // Also fetch data for the upcoming page in the background
     fetchAndRenderUpcoming();
 }
 
