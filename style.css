@@ -4,7 +4,7 @@
 :root {
   --bg-color: #000000; /* Black Background */
   --text-color: #ffffff;
-  --nav-color: #2c213d; /* Lighter Purple for elements */
+  --nav-color: #1c1c1e; /* Lighter Purple for elements CHANGED TO BLACK */
   --primary-color: #FFA500; /* Orange Accent */
   --play-button-color: var(--primary-color);
 }
@@ -48,13 +48,30 @@ body {
 
 .title { font-size: 25px; font-weight: bold; flex-grow: 1; text-align: center; white-space: nowrap; }
 
-/* ===== SLIDER ===== */
+/* ===== SLIDER [FIXED TO PREVENT BLINKING] ===== */
 .slider-container {
   width: 100%; max-width: 720px; height: 640px;
   margin: 0 auto; overflow: hidden; position: relative; background-color: #2b2b2b;
 }
-.slider { display: flex; width: 400%; height: 100%; transition: transform 0.5s ease-in-out; }
-.slide { min-width: 25%; height: 100%; position: relative; /* Removed cursor:pointer */}
+.slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* सभी बैनर शुरुआत में छिपे रहेंगे */
+  transition: opacity 0.8s ease-in-out; /* स्मूथ वेनिश इफ़ेक्ट के लिए */
+  z-index: 1; /* सभी बैनर को पीछे की लेयर पर रखता है */
+}
+.slide.active {
+  opacity: 1; /* जो बैनर एक्टिव है, वह दिखेगा */
+  z-index: 2; /* एक्टिव बैनर दूसरे बैनर के ऊपर आ जाएगा */
+}
 .slide img { width: 100%; height: 100%; object-fit: cover; }
 .slide-content {
   position: absolute; bottom: 0; left: 0; right: 0; padding: 30px;
@@ -83,6 +100,34 @@ body {
   color: #121212; /* Dark text for better contrast */
 }
 .list-button { background-color: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.5); }
+
+/* Slider Navigation Buttons [NEW] */
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 15px 10px;
+    font-size: 24px;
+    z-index: 5;
+    opacity: 0; /* Hide by default */
+    transition: opacity 0.3s ease;
+}
+.slider-container:hover .slider-nav {
+    opacity: 1; /* Show on hover over the container */
+}
+.slider-nav.prev {
+    left: 10px;
+    border-radius: 0 5px 5px 0;
+}
+.slider-nav.next {
+    right: 10px;
+    border-radius: 5px 0 0 5px;
+}
+
 
 /* ===== CATEGORY SECTION ===== */
 #dynamic-categories-container {
@@ -288,13 +333,15 @@ body {
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+/* === YAHAN BADLAV KIYA GAYA HAI === */
 .banner-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.85) 40%, rgba(0, 0, 0, 0.1) 80%, transparent 100%);
+    /* The 'background: linear-gradient(...)' line that created the shadow has been REMOVED. */
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -306,18 +353,29 @@ body {
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Text shadow added for readability */
 }
 .banner-season {
     font-size: 16px;
     font-weight: bold;
     margin: 4px 0 8px 0;
     text-transform: uppercase;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow added for readability */
 }
 .banner-genres {
     font-size: 13px;
     color: #ccc;
     margin: 0 0 10px 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow added for readability */
 }
+.countdown-header {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 10px 0 5px 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow added for readability */
+}
+/* === BADLAV KHATAM === */
+
 .banner-tags {
     display: flex;
     gap: 8px;
@@ -331,11 +389,7 @@ body {
     font-weight: bold;
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
-.countdown-header {
-    font-size: 14px;
-    font-weight: 500;
-    margin: 10px 0 5px 0;
-}
+
 .countdown-container {
     display: flex;
     gap: 8px;
@@ -422,7 +476,6 @@ body {
 .quality-720p { background-color: #4CAF50; color: white; }
 .quality-1080p { background-color: var(--primary-color); color: #121212; /* Dark text for better contrast */ }
 
-/* === YAHAN FINAL BADLAV KIYA GAYA HAI === */
 .details-description {
     font-size: 15px;
     color: #ccc;
@@ -432,7 +485,6 @@ body {
     word-wrap: break-word;
     white-space: pre-wrap; /* यह सुनिश्चित करता है कि टेक्स्ट जैसा लिखा गया है वैसा ही दिखे */
 }
-/* === BADLAV KHATAM === */
 
 /* New Social Buttons */
 .social-buttons-container {
@@ -531,10 +583,13 @@ body {
   .search-result-desc { font-size: 12px; }
   .details-title-box { font-size: 22px; }
   .banner-title { font-size: 24px; }
-  .banner-overlay { background: linear-gradient(to right, rgba(0, 0, 0, 0.9) 50%, rgba(0, 0, 0, 0.1) 90%, transparent 100%); }
+  .banner-overlay { 
+      /* This media query rule was overriding the main style. 
+         It is now removed to ensure no shadow appears on any screen size. */
+  }
 }
  @media (max-width: 380px) {
   .all-anime-grid {
       grid-template-columns: 1fr;
   }
-        }
+  }
