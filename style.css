@@ -320,74 +320,57 @@ body {
     width: 100%;
 }
 
-/* ===== NEW UPCOMING PAGE STYLES ===== */
+/* ===== NEW UPCOMING PAGE STYLES (UPDATED) ===== */
 #upcomingPage .page-content { padding: 20px 10px; }
 .upcoming-banner {
     position: relative;
-    height: 250px;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: hidden; /* Yeh content ko banner se bahar jane se rokega */
     margin-bottom: 20px;
     background-size: cover;
     background-position: center;
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    /* === YAHAN AAPKE ANURODH KE ANUSAAR BADLAV KIYE GAYE HAIN === */
+    aspect-ratio: 16 / 9; /* Banner ka anupat theek kiya gaya hai takay content fit ho */
+    max-height: 250px; /* Banner ki maximum unchai set ki gayi hai */
 }
 
-/* === YAHAN BADLAV KIYA GAYA HAI === */
 .banner-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* The 'background: linear-gradient(...)' line that created the shadow has been REMOVED. */
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end; /* Content neeche align hoga */
+    align-items: flex-start; /* Content left side mein align hoga */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 20%, transparent 70%); /* Text ke peeche halki shadow */
+    padding: 15px; /* Padding adjust ki gayi hai */
+    box-sizing: border-box; /* Yeh padding ko element ke size mein shamil karta hai */
 }
 .banner-title {
-    font-size: 28px;
+    font-size: 22px; /* Font size adjust kiya gaya */
     font-weight: 900;
     margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Text shadow added for readability */
 }
 .banner-season {
-    font-size: 16px;
-    font-weight: bold;
-    margin: 4px 0 8px 0;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow added for readability */
+    font-size: 18px; /* Font size adjust kiya gaya */
+    font-weight: 700;
+    margin: 2px 0 8px 0;
 }
 .banner-genres {
-    font-size: 13px;
-    color: #ccc;
+    font-size: 14px;
+    color: #E0E0E0;
     margin: 0 0 10px 0;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow added for readability */
 }
 .countdown-header {
-    font-size: 14px;
-    font-weight: 500;
-    margin: 10px 0 5px 0;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Text shadow added for readability */
-}
-/* === BADLAV KHATAM === */
-
-.banner-tags {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-.banner-tags .tag {
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 3px 8px;
-    border-radius: 5px;
-    font-size: 11px;
-    font-weight: bold;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: #E53935; /* Reddish color */
 }
 
 .countdown-container {
@@ -395,23 +378,23 @@ body {
     gap: 8px;
 }
 .countdown-box {
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #111;
-    border-radius: 5px;
-    padding: 5px 8px;
+    background-color: transparent;
+    border: 2px solid #00BCD4; /* Screenshot jaisa border */
+    border-radius: 4px;
+    padding: 4px;
     text-align: center;
-    min-width: 40px;
+    min-width: 45px;
+    color: white;
 }
 .countdown-number {
-    font-size: 18px;
-    font-weight: bold;
-    display: block;
+    font-size: 18px; /* Number ka font size adjust kiya gaya */
+    font-weight: 700;
+    line-height: 1; /* Line height theek ki gayi */
 }
 .countdown-label {
-    font-size: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
+    display: none; /* 'd, h, m, s' labels ko hide kar diya gaya hai */
 }
+/* === BADLAV KHATAM === */
 
 /* ===== NEW DETAILS PAGE STYLES ===== */
 #detailsPage .page-content { padding: 20px; }
@@ -429,141 +412,55 @@ body {
     font-weight: bold;
 }
 
-/* === FIXED DETAILS ROW STYLES === */
 .info-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* 'flex-start' aligns items to the top, which is better for multi-line text */
+    align-items: flex-start;
     font-size: 15px;
     margin-bottom: 12px;
-    gap: 15px; /* Adds space between the label and value */
-}
-
-.info-label {
-    color: #ccc;
-    flex-shrink: 0; /* Prevents the label from shrinking or wrapping */
-}
-
-.info-value {
-    color: #fff;
-    font-weight: 500;
-    text-align: right; /* Aligns the text to the right */
-    word-break: break-word; /* This is the most important part: it allows long text to wrap to the next line */
-}
-/* === END OF FIX === */
-
-.info-row:last-child {
-    margin-bottom: 0;
-}
-
-.download-box {
-    display: flex;
-    flex-direction: column;
     gap: 15px;
-    margin-top: 20px;
 }
-.download-btn {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-}
+.info-label { color: #ccc; flex-shrink: 0; }
+.info-value { color: #fff; font-weight: 500; text-align: right; word-break: break-word; }
+.info-row:last-child { margin-bottom: 0; }
+
+.download-box { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+.download-btn { padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; text-align: center; text-decoration: none; cursor: pointer; }
 .quality-480p { background-color: #FFA500; color: #121212; }
 .quality-720p { background-color: #4CAF50; color: white; }
-.quality-1080p { background-color: var(--primary-color); color: #121212; /* Dark text for better contrast */ }
+.quality-1080p { background-color: var(--primary-color); color: #121212; }
 
 .details-description {
     font-size: 15px;
     color: #ccc;
-    line-height: 1.9; /* लाइनों के बीच की दूरी और बढ़ाई गई है */
+    line-height: 1.9;
     margin-top: 25px;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    white-space: pre-wrap; /* यह सुनिश्चित करता है कि टेक्स्ट जैसा लिखा गया है वैसा ही दिखे */
+    white-space: pre-wrap;
 }
 
-/* New Social Buttons */
-.social-buttons-container {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-}
-.social-btn {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-}
-.update-btn {
-    background-color: #D32F2F; /* Red */
-}
-.support-btn {
-    background-color: #1976D2; /* Blue */
-}
+.social-buttons-container { display: flex; gap: 15px; margin-top: 20px; }
+.social-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; text-align: center; text-decoration: none; color: white; cursor: pointer; }
+.update-btn { background-color: #D32F2F; }
+.support-btn { background-color: #1976D2; }
 
 /* ===== ALL ANIME PAGE STYLES ===== */
-#allAnimePage .page-content {
-  padding: 20px 15px;
-}
-.all-anime-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-.all-anime-grid .card {
-    flex: auto;
-    width: 100%;
-}
-.all-anime-grid .card-img img {
-    height: 240px;
-}
+#allAnimePage .page-content { padding: 20px 15px; }
+.all-anime-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.all-anime-grid .card { flex: auto; width: 100%; }
+.all-anime-grid .card-img img { height: 240px; }
 
 /* ===== NEW DMCA PAGE STYLES ===== */
-#dmca-content {
-    color: #ccc;
-    line-height: 1.7;
-}
-#dmca-content h3 {
-    color: var(--primary-color);
-    font-size: 20px;
-    margin-top: 25px;
-    margin-bottom: 15px;
-}
-#dmca-content h3:first-child {
-    margin-top: 0;
-}
-#dmca-content p {
-    margin-bottom: 1em;
-}
-#dmca-content ol {
-    padding-left: 20px;
-}
-#dmca-content li {
-    margin-bottom: 1em;
-}
-#dmca-content a {
-    color: #4dabf7; /* Lighter blue for links */
-    text-decoration: none;
-}
-#dmca-content a:hover {
-    text-decoration: underline;
-}
-.content-divider {
-  border: none;
-  height: 1px;
-  background-color: #2a2a2a;
-  margin: 30px 0;
-}
+#dmca-content { color: #ccc; line-height: 1.7; }
+#dmca-content h3 { color: var(--primary-color); font-size: 20px; margin-top: 25px; margin-bottom: 15px; }
+#dmca-content h3:first-child { margin-top: 0; }
+#dmca-content p { margin-bottom: 1em; }
+#dmca-content ol { padding-left: 20px; }
+#dmca-content li { margin-bottom: 1em; }
+#dmca-content a { color: #4dabf7; text-decoration: none; }
+#dmca-content a:hover { text-decoration: underline; }
+.content-divider { border: none; height: 1px; background-color: #2a2a2a; margin: 30px 0; }
 
 @media (max-width: 768px) {
   .slider-container { height: 560px; }
@@ -582,14 +479,9 @@ body {
   .search-result-title { font-size: 16px; }
   .search-result-desc { font-size: 12px; }
   .details-title-box { font-size: 22px; }
-  .banner-title { font-size: 24px; }
-  .banner-overlay { 
-      /* This media query rule was overriding the main style. 
-         It is now removed to ensure no shadow appears on any screen size. */
-  }
 }
  @media (max-width: 380px) {
   .all-anime-grid {
       grid-template-columns: 1fr;
   }
-  }
+}```
